@@ -1,5 +1,6 @@
 use cli_table::{format, print_stdout, Cell, Style, Table};
 use std::io::{self, Write};
+use std::iter::Extend;
 use std::str::FromStr;
 use structopt::StructOpt;
 
@@ -20,35 +21,38 @@ fn get_in<T, F: Fn(&str) -> Result<T, String>>(prompt: &str, f: F) -> T {
 
 fn print_scores(players: &Vec<Player>) {
     let mut table = vec![];
-    let title_row = players
-        .iter()
-        .map(|p| format!("{}: {}", p.name.clone(), p.phase()).cell())
+    let title_row = std::iter::once("Round".cell().bold(true))
+        .chain(
+            players
+                .iter()
+                .map(|p| format!("{}: {}", p.name.clone(), p.phase()).cell().bold(true)),
+        )
         .collect::<Vec<_>>();
 
     let num_rounds = players[0].get_rounds().len();
     for i in 0..num_rounds {
         table.push(
-            players
-                .iter()
-                .map(|p| {
+            std::iter::once(format!("Round {}", i + 1).cell().bold(true))
+                .chain(players.iter().map(|p| {
                     let round = p.get_round(i);
                     let mut ret = round.score.to_string();
                     if round.phased_up {
                         ret.push('+');
                     }
                     ret.cell()
-                })
+                }))
                 .collect(),
         )
     }
     table.push(Vec::new());
     table.push(
+        std::iter::once("".cell()).chain(
         players
             .iter()
-            .map(|p| format!("Total: {}", p.total_score()).cell())
+            .map(|p| format!("Total: {}", p.total_score()).cell().bold(true)))
             .collect(),
     );
-    print_stdout(table.table().title(title_row).bold(true));
+    print_stdout(table.table().title(title_row));
 }
 
 fn main() {
@@ -59,7 +63,6 @@ fn main() {
         .map(|x| Player::new(&x))
         .collect::<Vec<Player>>();
 
-
     loop {
         print_scores(&players);
         if let Some(player) = players
@@ -67,7 +70,7 @@ fn main() {
             .filter(|p| p.phase() == 11)
             .min_by(|p1, p2| p1.total_score().cmp(&p2.total_score()))
         {
-            println!("{} wins!", &player.name)
+            println!("{} wins!", &player.name);
             break;
         }
 
