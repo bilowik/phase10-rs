@@ -1,6 +1,5 @@
-use cli_table::{format, print_stdout, Cell, Style, Table};
+use cli_table::{print_stdout, Cell, Style, Table};
 use std::io::{self, Write};
-use std::iter::Extend;
 use std::str::FromStr;
 use structopt::StructOpt;
 
@@ -104,10 +103,6 @@ struct Round {
 impl Round {
     pub fn new(score: usize, phased_up: bool) -> Self {
         Self { score, phased_up }
-    }
-
-    pub fn won(&self) -> bool {
-        self.score == 0
     }
 }
 
