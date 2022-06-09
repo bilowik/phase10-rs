@@ -18,7 +18,7 @@ fn get_in<T, F: Fn(&str) -> Result<T, String>>(prompt: &str, f: F) -> T {
     }
 }
 
-fn print_scores(players: &Vec<Player>) {
+fn build_table(players: &Vec<Player>) -> cli_table::TableStruct {
     let mut table = vec![];
     let title_row = std::iter::once("Round".cell().bold(true))
         .chain(
@@ -51,7 +51,7 @@ fn print_scores(players: &Vec<Player>) {
             .map(|p| format!("Total: {}", p.total_score()).cell().bold(true)))
             .collect(),
     );
-    print_stdout(table.table().title(title_row));
+    table.table().title(title_row)
 }
 
 fn main() {
@@ -63,7 +63,9 @@ fn main() {
         .collect::<Vec<Player>>();
 
     loop {
-        print_scores(&players);
+        if let Err(e) = print_stdout(build_table(&players)) {
+            println!("Error printing table: {}", e);
+        }
         if let Some(player) = players
             .iter()
             .filter(|p| p.phase() == 11)
