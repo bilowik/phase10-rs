@@ -147,5 +147,6 @@ impl Player {
 
 #[derive(StructOpt, Debug)]
 struct Args {
+    #[structopt(required(true))]
     players: Vec<String>,
 }
