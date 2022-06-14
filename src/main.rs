@@ -45,10 +45,10 @@ fn build_table(players: &Vec<Player>) -> cli_table::TableStruct {
     }
     table.push(Vec::new());
     table.push(
-        std::iter::once("".cell()).chain(
+        std::iter::once("Total:".cell().bold(true)).chain(
         players
             .iter()
-            .map(|p| format!("Total: {}", p.total_score()).cell().bold(true)))
+            .map(|p| p.total_score().cell().bold(true)))
             .collect(),
     );
     table.table().title(title_row)
