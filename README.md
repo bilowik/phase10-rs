@@ -9,4 +9,5 @@ a pen and paper for game night.
 
 
 ## Example
-![image](https://user-images.githubusercontent.com/43679332/172915042-d4290f0e-3370-466b-9eab-594f0f8f1f7b.png)
+![image](https://user-images.githubusercontent.com/43679332/173671580-9543182f-6d94-419e-a9fb-b3a47b5afac0.png)
+
